@@ -9,7 +9,14 @@ from sklearn.metrics.pairwise import cosine_similarity
 app = FastAPI(title="Resume Analyzer Prototype")
 
 # Multilingual model (works better for German + English)
-model = SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+model = None
+
+def get_model():
+    global model
+    if model is None:
+        model = SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+    return model
+
 
 SKILLS = [
     "python", "java", "javascript", "typescript", "c", "c++", "sql",
@@ -69,7 +76,8 @@ def clean_text(t: str) -> str:
 def similarity(a: str, b: str) -> float:
     a = clean_text(a)
     b = clean_text(b)
-    emb = model.encode([a, b])
+    m = get_model()
+    emb = m.encode([a, b])
     return float(cosine_similarity([emb[0]], [emb[1]])[0][0])
 
 
