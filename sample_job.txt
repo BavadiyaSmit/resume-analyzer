@@ -1,0 +1,13 @@
+Junior Software Developer / Werkstudent (m/w/d)
+We are looking for a motivated Junior Software Developer to support our engineering team.
+Requirements:
+* Good knowledge of JavaScript, HTML, and CSS
+* Basic experience with backend technologies such as PHP, Java, or REST APIs
+* Familiarity with SQL or relational databases
+* Understanding of Git or version control systems
+* Currently pursuing a degree in Computer Science or related field
+Nice to have:
+* Basic Python knowledge
+* Interest in Machine Learning
+* Experience working on university software projects
+* Teamwork and problem-solving skills
