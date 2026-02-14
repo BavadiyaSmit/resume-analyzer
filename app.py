@@ -72,12 +72,16 @@ def clean_text(t: str) -> str:
     t = t.replace("/", " ")
     return " ".join(t.split())
 
+def limit_text(t: str, max_chars: int) -> str:
+    t = clean_text(t)
+    return t[:max_chars]
+
 
 def similarity(a: str, b: str) -> float:
     a = clean_text(a)
     b = clean_text(b)
     m = get_model()
-    emb = m.encode([a, b])
+    emb = m.encode([a, b],  batch_size=2, show_progress_bar=False)
     return float(cosine_similarity([emb[0]], [emb[1]])[0][0])
 
 
@@ -143,6 +147,7 @@ async def analyze(
 ):
     resume_bytes = await resume.read()
     resume_text = extract_text_from_pdf(resume_bytes)
+    resume_text = limit_text(resume_text, 8000)
 
     if not resume_text:
         return {"error": "Could not extract text from this PDF (might be scanned). Try a text-based PDF."}
@@ -151,6 +156,8 @@ async def analyze(
     if not job_description:
         with open("sample_job.txt", "r", encoding="utf-8") as f:
           job_description = f.read()
+
+    job_description = limit_text(job_description, 4000)
 
     # Overall semantic match
     sim = similarity(resume_text, job_description)
