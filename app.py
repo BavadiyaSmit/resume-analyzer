@@ -14,7 +14,7 @@ model = None
 def get_model():
     global model
     if model is None:
-        model = SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+        model = SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L3-v2")
     return model
 
 
@@ -78,12 +78,12 @@ def limit_text(t: str, max_chars: int) -> str:
 
 
 def similarity(a: str, b: str) -> float:
-    a = clean_text(a)
-    b = clean_text(b)
-    m = get_model()
-    emb = m.encode([a, b],  batch_size=2, show_progress_bar=False)
-    return float(cosine_similarity([emb[0]], [emb[1]])[0][0])
-
+    try:
+        m = get_model()
+        emb = m.encode([clean_text(a), clean_text(b)], batch_size=2, show_progress_bar=False)
+        return float(cosine_similarity([emb[0]], [emb[1]])[0][0])
+    except Exception:
+        return 0.0
 
 def extract_skills(text: str) -> set[str]:
     t = clean_text(text)
